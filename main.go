@@ -5,6 +5,7 @@ import (
 )
 
 func main() {
-	application := &app.App{Router:"Router", DB:"Database Client"}
+	application := &app.App{}
 	application.Initialize()
+	application.Run(":8080")
 }
