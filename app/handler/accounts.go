@@ -1,28 +1,59 @@
 package handler
 
 import (
+	"encoding/json"
+	"github.com/carlosdamazio/Stone-REST-API/app/model"
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/mongo"
 	"net/http"
 )
 
 func GetAccounts(db *mongo.Client, w http.ResponseWriter, r *http.Request) {
-	respondJson(w, http.StatusOK, map[string]string{
-		"msg": "All accounts will appear in here!",
-	})
+	accounts := model.GetAccounts(db)
+
+	if accounts == nil {
+		respondJsonError(w, http.StatusNotFound,"No account was found in the database.")
+		return
+	} else {
+		respondJson(w, http.StatusOK, accounts)
+	}
 }
 
 func GetAccountBalance(db *mongo.Client, w http.ResponseWriter, r *http.Request) {
+	account := &model.Account{}
 	vars := mux.Vars(r)
 	id := vars["account_id"]
 
-	respondJson(w, http.StatusOK, map[string]string{
-		"msg": "Balance of account " + id + " will appear in here!",
-	})
+	err := account.GetAccountBalance(db, id)
+
+	if err != nil {
+		respondJsonError(w, http.StatusNotFound, err.Error())
+		return
+	} else {
+		balance := account.Balance
+		respondJson(w, http.StatusOK, map[string]float64{
+			"balance": balance,
+		})
+	}
 }
 
 func CreateAccount(db *mongo.Client, w http.ResponseWriter, r *http.Request) {
-	respondJson(w, http.StatusOK, map[string]string{
-		"msg": "You'll create an account in here!",
-	})
+	account := &model.Account{}
+	decoder := json.NewDecoder(r.Body)
+
+	if err := decoder.Decode(account); err != nil {
+		respondJsonError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	account.Save()
+
+	res, err := account.InsertAccount(db)
+
+	if err != nil {
+		respondJsonError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	respondJson(w, http.StatusCreated, res)
 }
