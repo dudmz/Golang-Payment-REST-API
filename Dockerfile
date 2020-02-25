@@ -4,10 +4,17 @@ ENV GOPATH /go
 
 RUN go get -u github.com/golang/dep/...
 COPY . /go/src/github.com/carlosdamazio/Stone-REST-API
-RUN cd /go/src/github.com/carlosdamazio/Stone-REST-API \
- && dep ensure && go build -o /go/api main.go
+
+WORKDIR /go/src/github.com/carlosdamazio/Stone-REST-API
+RUN echo "*********DEPENDENCY MANAGEMENT PHASE*****"
+RUN dep ensure
+
+RUN echo "*********TESTING PHASE*******************"
+RUN go test ./app/model && go test ./app/handler && go test ./app/serializer
+
+RUN echo "*********BUILD PHASE*********************"
+RUN go build -o /go/api main.go
 
 EXPOSE 8080
-
 CMD ["/go/api"]
 

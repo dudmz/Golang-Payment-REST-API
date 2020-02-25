@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"github.com/carlosdamazio/Stone-REST-API/app/model"
+	"github.com/carlosdamazio/Stone-REST-API/app/serializer"
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/mongo"
 	"net/http"
@@ -43,6 +44,11 @@ func CreateAccount(db *mongo.Client, w http.ResponseWriter, r *http.Request) {
 
 	if err := decoder.Decode(account); err != nil {
 		respondJsonError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	if ok, err := serializer.SerializeRequest(account); !ok {
+		respondJsonError(w, http.StatusBadRequest, err)
 		return
 	}
 
