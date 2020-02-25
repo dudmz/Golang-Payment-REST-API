@@ -47,7 +47,7 @@ func CreateAccount(db *mongo.Client, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if ok, err := serializer.SerializeRequest(account); !ok {
+	if ok, err := serializer.SerializeAccountRequest(account); !ok {
 		respondJsonError(w, http.StatusBadRequest, err)
 		return
 	}

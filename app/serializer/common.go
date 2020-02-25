@@ -5,7 +5,7 @@ import (
 )
 
 
-func SerializeRequest(account *model.Account) (bool, string) {
+func SerializeAccountRequest(account *model.Account) (bool, string) {
 	if account.Name == "" {
 		return false, "Name cannot be empty or be missing."
 	} else if account.Cpf == "" {

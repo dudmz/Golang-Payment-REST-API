@@ -14,7 +14,7 @@ func TestAccount_Save_No_Data(t *testing.T) {
 	}
 }
 
-func TestAccount_Save_No_Override_Balance(t *testing.T) {
+func TestAccount_Save_Override_Balance(t *testing.T) {
 	value := 20000000.00
 	account := &Account{Balance: value}
 
