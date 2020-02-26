@@ -17,11 +17,6 @@ func GetTransfers(db *mongo.Client, w http.ResponseWriter, r *http.Request) {
 	} else {
 		respondJson(w, http.StatusOK, transfers)
 	}
-
-
-	respondJson(w, http.StatusOK, map[string]string{
-		"msg": "All transfers will appear in here!",
-	})
 }
 
 func MakeTransfer(db *mongo.Client, w http.ResponseWriter, r *http.Request) {
@@ -51,8 +46,4 @@ func MakeTransfer(db *mongo.Client, w http.ResponseWriter, r *http.Request) {
 	}
 
 	respondJson(w, http.StatusCreated, res)
-
-	respondJson(w, http.StatusOK, map[string]string{
-		"msg": "You'll be able to make a transfer in here!",
-	})
 }
