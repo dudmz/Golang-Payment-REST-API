@@ -25,7 +25,7 @@ func GetAccountBalance(db *mongo.Client, w http.ResponseWriter, r *http.Request)
 	vars := mux.Vars(r)
 	id := vars["account_id"]
 
-	err := account.GetAccountBalance(db, id)
+	err := account.GetAccount(db, id)
 
 	if err != nil {
 		respondJsonError(w, http.StatusNotFound, err.Error())

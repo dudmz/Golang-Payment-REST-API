@@ -15,3 +15,12 @@ func SerializeAccountRequest(account *model.Account) (bool, string) {
 	}
 }
 
+func SerializeTransferRequest(transfer *model.Transfer) (bool, string) {
+	if transfer.DestinationAccount == "" || transfer.OriginAccount == "" {
+		return false, "Transfer must have origin and destination account."
+	} else if transfer.Amount <= 0 {
+		return false, "Amount cannot be 0 or less."
+	} else {
+		return true, ""
+	}
+}

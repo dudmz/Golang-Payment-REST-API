@@ -23,7 +23,7 @@ func (account *Account) Save() {
 	account.Balance = 30.00
 }
 
-func (account *Account) GetAccountBalance(db *mongo.Client, id string) error {
+func (account *Account) GetAccount(db *mongo.Client, id string) error {
 	value, _ := primitive.ObjectIDFromHex(id)
 	filter := bson.D{{"_id", value}}
 	err := GetCollection(db, "accounts").FindOne(context.TODO(), filter).Decode(&account)
@@ -34,6 +34,20 @@ func (account *Account) GetAccountBalance(db *mongo.Client, id string) error {
 func (account *Account) InsertAccount(db *mongo.Client) (*mongo.InsertOneResult, error) {
 	insertResult, err := GetCollection(db, "accounts").InsertOne(context.TODO(), account)
 	return insertResult, err
+}
+
+func (account *Account) UpdateBalance(db *mongo.Client, newBalance float64) (*mongo.UpdateResult, error) {
+	result, err := GetCollection(db, "transfer").UpdateOne(context.TODO(),
+		bson.M{"_id": account.Id},
+		bson.D{
+			{"$set", bson.D{{"balance", newBalance}}},
+		},)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return result, err
 }
 
 func GetAccounts(db *mongo.Client) []*Account {
