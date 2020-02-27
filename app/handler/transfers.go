@@ -35,8 +35,20 @@ func MakeTransfer(db *mongo.Client, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	originAccount.GetAccount(db, transfer.OriginAccount)
-	destinationAccount.GetAccount(db, transfer.DestinationAccount)
+	transfer.Save()
+
+	errOrigin := originAccount.GetAccount(db, transfer.OriginAccount)
+	errDestination := destinationAccount.GetAccount(db, transfer.DestinationAccount)
+
+	if errOrigin != nil {
+		respondJsonError(w, http.StatusBadRequest, "Origin account doesn't exist.")
+		return
+	}
+
+	if errDestination != nil {
+		respondJsonError(w, http.StatusBadRequest, "Destination account doesn't exist.")
+		return
+	}
 
 	res, err := transfer.MakeTransfer(db, &originAccount, &destinationAccount)
 

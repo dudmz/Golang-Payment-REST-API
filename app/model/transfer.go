@@ -17,6 +17,11 @@ type Transfer struct {
 	Created_at 			time.Time			`json:"createdAt"`
 }
 
+func (transfer *Transfer) Save() {
+	transfer.Id = primitive.NewObjectID()
+	transfer.Created_at = time.Now()
+}
+
 func GetTransfers(db *mongo.Client) []*Transfer{
 	var transfers []*Transfer
 	cur, err := GetCollection(db, "transfers").Find(context.TODO(), bson.D{{}})
@@ -46,13 +51,21 @@ func (transfer *Transfer) MakeTransfer(db *mongo.Client, origin *Account, destin
 	}
 
 	transfer.MakeTransaction(db, origin, destination)
-	insertResult, err := GetCollection(db, "accounts").InsertOne(context.TODO(), transfer)
-	return insertResult, err.Error()
+	insertResult, err := GetCollection(db, "transfers").InsertOne(context.TODO(), transfer)
+
+	if err != nil {
+		return insertResult, err.Error()
+	} else {
+		return insertResult, ""
+	}
 }
 
 func (transfer *Transfer) MakeTransaction(db *mongo.Client, origin *Account, destination *Account) {
 	newOriginBalance := origin.Balance - transfer.Amount
 	newDestinationBalance := destination.Balance + transfer.Amount
+
+	log.Print(newOriginBalance)
+	log.Print(newDestinationBalance)
 
 	origin.UpdateBalance(db, newOriginBalance)
 	destination.UpdateBalance(db, newDestinationBalance)
