@@ -18,6 +18,8 @@ entities.
 ```
 $ docker-compose up -d --build
 
+# It will run on localhost:8080
+
 # To stop the project...
 
 $ docker-compose down
@@ -25,6 +27,7 @@ $ docker-compose down
 
 
 ## API REST Specification
+Online specs may be seen [here](https://documenter.getpostman.com/view/3603979/SzKZsFsW?version=latest).
 
 Rule of thumb: JSON format only.
 

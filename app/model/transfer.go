@@ -47,7 +47,7 @@ func GetTransfers(db *mongo.Client) []*Transfer{
 
 func (transfer *Transfer) MakeTransfer(db *mongo.Client, originAccount *Account, destinationAccount *Account) (*mongo.InsertOneResult, string) {
 	if transfer.Amount > originAccount.Balance {
-		return nil, "Cannot make transfer with values that surpasses origin's balance."
+		return nil, "Cannot make transfer with value that surpasses origin account's balance."
 	}
 
 	transfer.MakeTransaction(db, originAccount, destinationAccount)
