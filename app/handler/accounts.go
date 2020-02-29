@@ -31,9 +31,8 @@ func GetAccountBalance(db *mongo.Client, w http.ResponseWriter, r *http.Request)
 		respondJsonError(w, http.StatusNotFound, err.Error())
 		return
 	} else {
-		balance := account.Balance
 		respondJson(w, http.StatusOK, map[string]float64{
-			"balance": balance,
+			"balance": account.Balance,
 		})
 	}
 }

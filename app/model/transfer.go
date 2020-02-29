@@ -45,12 +45,12 @@ func GetTransfers(db *mongo.Client) []*Transfer{
 	return transfers
 }
 
-func (transfer *Transfer) MakeTransfer(db *mongo.Client, origin *Account, destination *Account) (*mongo.InsertOneResult, string) {
-	if transfer.Amount > origin.Balance {
+func (transfer *Transfer) MakeTransfer(db *mongo.Client, originAccount *Account, destinationAccount *Account) (*mongo.InsertOneResult, string) {
+	if transfer.Amount > originAccount.Balance {
 		return nil, "Cannot make transfer with values that surpasses origin's balance."
 	}
 
-	transfer.MakeTransaction(db, origin, destination)
+	transfer.MakeTransaction(db, originAccount, destinationAccount)
 	insertResult, err := GetCollection(db, "transfers").InsertOne(context.TODO(), transfer)
 
 	if err != nil {
@@ -60,13 +60,13 @@ func (transfer *Transfer) MakeTransfer(db *mongo.Client, origin *Account, destin
 	}
 }
 
-func (transfer *Transfer) MakeTransaction(db *mongo.Client, origin *Account, destination *Account) {
-	newOriginBalance := origin.Balance - transfer.Amount
-	newDestinationBalance := destination.Balance + transfer.Amount
+func (transfer *Transfer) MakeTransaction(db *mongo.Client, originAccount *Account, destinationAccount *Account) {
+	newOriginBalance := originAccount.Balance - transfer.Amount
+	newDestinationBalance := destinationAccount.Balance + transfer.Amount
 
 	log.Print(newOriginBalance)
 	log.Print(newDestinationBalance)
 
-	origin.UpdateBalance(db, newOriginBalance)
-	destination.UpdateBalance(db, newDestinationBalance)
+	originAccount.UpdateBalance(db, newOriginBalance)
+	destinationAccount.UpdateBalance(db, newDestinationBalance)
 }
