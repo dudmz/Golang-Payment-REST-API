@@ -27,7 +27,10 @@ func (account *Account) GetAccount(db *mongo.Client, id string) error {
 	accountId, err := primitive.ObjectIDFromHex(id)
 
 	if err != nil {
-		return err
+		if err.Error() == "encoding/hex: odd length hex string" {
+		} else {
+			return err
+		}
 	}
 
 	filter := bson.M{"_id": accountId}

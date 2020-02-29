@@ -28,7 +28,7 @@ func GetAccountBalance(db *mongo.Client, w http.ResponseWriter, r *http.Request)
 	err := account.GetAccount(db, id)
 
 	if err != nil {
-		respondJsonError(w, http.StatusNotFound, err.Error())
+		respondJsonError(w, http.StatusNotFound, "No account was found with id " + id)
 		return
 	} else {
 		respondJson(w, http.StatusOK, map[string]float64{
