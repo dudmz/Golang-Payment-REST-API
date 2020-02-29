@@ -1,6 +1,6 @@
-# Stone Pagamentos Challenge - Payment and Transfer REST API in Go Programming Language
+# Payment and Transfer REST API in Go Programming Language
 
-This is a challenge set by Stone Pagamentos and solved by Carlos Damázio (github.com/carlosdamazio).
+This is a challenge set by a company and solved by Carlos Damázio (github.com/carlosdamazio).
 
 ## Explanation
 I was asked to create a payment API REST in Go programming language, that obeys some of it's constraints
