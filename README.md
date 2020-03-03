@@ -60,7 +60,7 @@ Rule of thumb: JSON format only.
 
 ### Business Constraints
 
-- Balance might be initialized with any value to make it simple (default is 300).
+- Balance might be initialized with any value to make it simple (default is 30).
 
 ## Transfer entity
 
